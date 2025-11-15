@@ -10,6 +10,17 @@
         </a>
     </div>
 
+    <!-- Display Validation Errors -->
+    @if ($errors->any())
+        <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
+            <ul class="list-disc pl-5">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form action="{{ route('students.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
         @csrf
 
@@ -22,7 +33,7 @@
 
         <!-- Name -->
         <div>
-            <label class="block text-sm text-gray-700 font-medium mb-1">Full Name</label>
+            <label class="block text-sm text-gray-700 font-medium mb-1">Full Name <span class="text-red-500">*</span></label>
             <input type="text" name="name" 
                    class="w-full border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" 
                    placeholder="Enter name" required>
@@ -30,7 +41,7 @@
 
         <!-- Email -->
         <div>
-            <label class="block text-sm text-gray-700 font-medium mb-1">Email</label>
+            <label class="block text-sm text-gray-700 font-medium mb-1">Email <span class="text-red-500">*</span></label>
             <input type="email" name="email" 
                    class="w-full border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" 
                    placeholder="example@email.com" required>
@@ -47,16 +58,16 @@
         <!-- Age & Year -->
         <div class="grid grid-cols-2 gap-3">
             <div>
-                <label class="block text-sm text-gray-700 font-medium mb-1">Age</label>
+                <label class="block text-sm text-gray-700 font-medium mb-1">Age <span class="text-red-500">*</span></label>
                 <input type="number" name="age" 
                        class="w-full border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" 
-                       placeholder="Age">
+                       placeholder="Age" required min="1">
             </div>
 
             <div>
-                <label class="block text-sm text-gray-700 font-medium mb-1">Year Level</label>
+                <label class="block text-sm text-gray-700 font-medium mb-1">Year Level <span class="text-red-500">*</span></label>
                 <select name="year_level" 
-                        class="w-full border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        class="w-full border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" required>
                     <option value="">Select</option>
                     <option value="1">1st Year</option>
                     <option value="2">2nd Year</option>
@@ -68,9 +79,9 @@
 
         <!-- Assign Class -->
         <div>
-            <label class="block text-sm text-gray-700 font-medium mb-1">Assign Class</label>
+            <label class="block text-sm text-gray-700 font-medium mb-1">Assign Class <span class="text-red-500">*</span></label>
             <select name="class_id" 
-                    class="w-full border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    class="w-full border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" required>
                 <option value="">Select class</option>
                 @foreach($classes as $class)
                     <option value="{{ $class->id }}">{{ $class->class_name }}</option>

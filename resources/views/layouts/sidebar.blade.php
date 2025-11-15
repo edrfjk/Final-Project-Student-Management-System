@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Student Management</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 </head>
 <body class="bg-gray-100 flex">
 
@@ -44,5 +45,8 @@
     <main class="flex-1 p-8">
         @yield('content')
     </main>
+
+
+@livewireScripts
 </body>
 </html>

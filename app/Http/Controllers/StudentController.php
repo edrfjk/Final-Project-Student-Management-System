@@ -41,26 +41,42 @@ class StudentController extends Controller
 
 public function store(Request $request)
 {
-    $data = $request->validate([
-        'picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    // Validate required fields
+    $request->validate([
         'name' => 'required|string|max:255',
-        'email' => 'required|email|max:255',
-        'address' => 'nullable|string',
-        'age' => 'nullable|integer',
-        'year_level' => 'nullable|integer',
-        'class_id' => 'nullable|exists:classes,id',
+        'email' => 'required|email',
+        'age' => 'required|integer|min:1',
+        'year_level' => 'required|integer|between:1,4',
+        'class_id' => 'required|exists:classes,id',
+        'picture' => 'nullable|image|max:2048',
     ]);
 
-    // 🖼 Handle file upload
-    if ($request->hasFile('picture')) {
-        $data['photo'] = $request->file('picture')->store('students', 'public');
+    // Check if email already exists
+    if (Student::where('email', $request->email)->exists()) {
+        return back()->withInput()->with('error', 'This email is already used by another student.');
     }
 
-    // ✅ Create the student record
-    Student::create($data);
+    // Create student
+    $student = new Student();
+    $student->name = $request->name;
+    $student->email = $request->email;
+    $student->address = $request->address;
+    $student->age = $request->age;
+    $student->year_level = $request->year_level;
 
-    return redirect()->route('students.index')->with('success', 'Student added successfully!');
+    if ($request->hasFile('picture')) {
+        $student->photo = $request->file('picture')->store('students', 'public');
+    }
+
+    $student->save();
+
+    // Assign class
+    $student->classes()->attach($request->class_id);
+
+    return redirect()->route('students.index')
+                     ->with('success', 'Student added successfully!');
 }
+
 
 
 
